@@ -21,8 +21,26 @@ with open('acc_data.csv', mode='r') as csv_file:
     a_y = csv_reader[:,1] 
 
 N = np.length(a_y)
+freq_camp = 1000
+durata = np.round(N/freq_camp)
+X_t = a_y.reshape(N,freq_camp) # realizzazioni
 
-# Approssimazione nonlineare
+
+i = 0
+Cov = np.zeros((durata,durata))
+rho = np.zeros(durata)
+while i<durata:
+    for j in range(freq_camp):
+        Cov[i,j] = np.cov(X_t[i,:],X_t[j,:])[0][1]
+    i = i+1    
+
+# Determino autocorrelazione    
+i=0    
+for i in range(durata):
+    rho[i] = Cov[0,i]/np.sqrt(np.var(X_t[0,:])*np.var(X_t[i,:]))    
+        
+
+# Approssimazione nonlineare tramite base wavelet
 cA, cD3, cD2, cD1 = pywt.wavedec(a_y, 'db4', level=3)
 
 # soglia sotto la quale butto i coefficienti

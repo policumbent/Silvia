@@ -65,7 +65,7 @@ error = np.sum((a_y-a_y_rec)**2)/a_y.shape[0]
 
 print('Approximation error =',error)
 
-# FFT e spettro di potenza
+# FFT e spettro di potenza (freq. normalizzate)
 a_y_dft = f.fft(a_y)
 a_y_dft = a_y_dft[0:int(N/2)]
 

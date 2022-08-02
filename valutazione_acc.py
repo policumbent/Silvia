@@ -16,28 +16,42 @@ import scipy.io.wavfile
 
 import csv
 
-with open('acc_data.csv', mode='r') as csv_file:
+"""with open('acc_data.csv', mode='r') as csv_file:
     csv_reader = csv.DictReader(csv_file)
-    a_y = csv_reader[:,1] 
+    a_y = csv_reader[:,1] """
+    
+# Segnale test  
+t = np.linspace(0,6*np.pi,300)
+freq_camp = 100
+durata = 3
+a_y = np.sin(t)# + np.random.normal(0,1) 
+a_y_r = a_y.reshape(durata,freq_camp)
+plt.plot(t,a_y)
+plt.show()
 
-N = np.length(a_y)
-freq_camp = 1000
+# Segnale accelorometro
+N = np.size(a_y)
+"""freq_camp = 1000
 durata = np.round(N/freq_camp)
-X_t = a_y.reshape(N,freq_camp) # realizzazioni
+a_y_r = a_y.reshape(durata,freq_camp) # raggruppo le realizz in una fin temp """
 
 
+# Determino matrice covarianza (anche indicata con gamma)
 i = 0
 Cov = np.zeros((durata,durata))
-rho = np.zeros(durata)
+rho = np.zeros((durata,durata))
+rho_ver = np.zeros((durata,durata))
 while i<durata:
-    for j in range(freq_camp):
-        Cov[i,j] = np.cov(X_t[i,:],X_t[j,:])[0][1]
+    for j in range(durata):
+        Cov[i,j] = np.cov(a_y_r[i,:],a_y_r[j,:])[0][1] 
     i = i+1    
 
 # Determino autocorrelazione    
 i=0    
 for i in range(durata):
-    rho[i] = Cov[0,i]/np.sqrt(np.var(X_t[0,:])*np.var(X_t[i,:]))    
+    for j in range(durata):
+        rho[i] = Cov[i,j]/np.sqrt(np.var(a_y_r[i,:])*np.var(a_y_r[j,:]))
+        rho_ver[i]= Cov[0,i]/Cov[0,0] # verifica se processo è staz   
         
 
 # Approssimazione nonlineare tramite base wavelet
@@ -63,7 +77,7 @@ a_y_rec = pywt.waverec((cA,cD3_c,cD2_c,cD1_c), 'db4')
 
 error = np.sum((a_y-a_y_rec)**2)/a_y.shape[0]
 
-print('Approximation error =',error)
+print('Approximation error = ',error)
 
 # FFT e spettro di potenza (freq. normalizzate)
 a_y_dft = f.fft(a_y)
@@ -71,7 +85,8 @@ a_y_dft = a_y_dft[0:int(N/2)]
 
 psd_a_y = 1/(N*np.pi)*np.power(np.abs(a_y_dft),2)
 psd_a_y[1:int(N/2)+1] = 2*psd_a_y[1:int(N/2)+1]
-freq_2 = np.arange(0,np.pi,(2*np.pi)/N)
+# freq_2 = np.arange(0,np.pi,(2*np.pi)/N) # alternativ da 0-pi
+freq_2 = np.arange(0,1,2/N)
 plt.plot(freq_2,a_y_dft)
 plt.title('Fourier transform')
 plt.show()

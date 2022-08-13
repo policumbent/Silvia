@@ -2,7 +2,7 @@
 Analisi stabilità veicolo tramite accelerometro
 
 Obbiettivi: 
-1) identificare un intervallo temporale in cui il processo stocastico $$ \left ( X_t \right )_{t \in \mathbb{Z}} $$ avente come valori i dati dell'accelerometro sia stazionario
+1) identificare un intervallo temporale in cui il processo stocastico $\left ( X_t \right )_{t \in \mathbb{Z}}$ avente come valori i dati dell'accelerometro sia stazionario
 2) analizzare i dati
 
 Lessico: 
@@ -12,14 +12,14 @@ Lessico:
 
 In generale: per un processo stazionario
 - la fz. (matrice) di autocovarianza è simmetrica rispetto all'origine (alla diagonale principale)
-- la funzione di autocorrelazione dipende solo dal passo $$ h $$ tra i due istanti temporali
+- la funzione di autocorrelazione dipende solo dal passo $h$ tra i due istanti temporali
 
-Per il segnale test del seno + rumore gaussiano ($$ \mu = 0 $$, $$ \sigma = 5 $$), anche detto 'rumore bianco' (white noise):
-- db4 wavelet funziona bene quando il segnale non oscilla troppo velocemente (tipo per vel. angolare $$\omega = 1 $$), male invece per $$ \omega = 50 $$)
-- il rumore si ripercuote sulla componente $$ 0 $$ della trasformata di Fourier (e quindi anche sullo spettro di potenza), mentre il segnale vero e proprio (il seno) con $$ \omega = 1 $$ si 'scarica' ovviamente sulla prima componente dell'espansione di Fourier
+Per il segnale test del seno + rumore gaussiano ($\mu=0$, $\sigma=5$), anche detto 'rumore bianco' (white noise):
+- db4 wavelet funziona bene quando il segnale non oscilla troppo velocemente (tipo per vel. angolare $\omega = 1$), male invece per $\omega=50$)
+- il rumore si ripercuote sulla componente $0$ della trasformata di Fourier (e quindi anche sullo spettro di potenza), mentre il segnale vero e proprio (il seno) con $\omega = 1$ si 'scarica' ovviamente sulla prima componente dell'espansione di Fourier
 
 Per il solo segnale test del seno: 
-- db4 wavelet approssima bene
+- db4 wavelet approssima bene: errore di approssimazione nell'ordine di $10^{-5}$ 
 
 
 
